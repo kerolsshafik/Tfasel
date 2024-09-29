@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     public function up(): void
     {
         Schema::create('media', function (Blueprint $table) {
@@ -14,6 +13,7 @@ return new class extends Migration
             $table->morphs('model');
             $table->uuid()->nullable()->unique();
             $table->string('collection_name');
+            // $table->foreignId('media_id')->nullable()->constrained();
             $table->string('name');
             $table->string('file_name');
             $table->string('mime_type')->nullable();
