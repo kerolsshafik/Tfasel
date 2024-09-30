@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Articles extends Model
+class Article extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -26,6 +26,12 @@ class Articles extends Model
     ];
 
     protected $appends = ['Wishlist',];
+
+    public function categoey()
+    {
+
+        return $this->belongsTo(Category::class);
+    }
 
 
 
