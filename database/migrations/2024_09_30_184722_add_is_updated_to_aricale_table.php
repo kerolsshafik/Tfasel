@@ -11,7 +11,7 @@ return new class () extends Migration {
     public function up(): void
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->boolean('is_updated')->default(0);
+            $table->boolean('is_updated')->default(0)->after('is_published');
 
         });
     }
