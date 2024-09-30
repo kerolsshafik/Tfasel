@@ -13,9 +13,9 @@ class ArticleController extends Controller
      */
     public function index()
     {
+        $article = Article::all();
 
-        $art = Article::all();
-        return view('articles.index', compact('cat'));
+        return view('articles.index', compact('article'));
     }
 
     /**
@@ -23,9 +23,9 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        $cat = Category::all();
-        return view('articles.create', compact('cat'));
 
+        $category = Category::all();
+        return view('articles.create', compact('category'));
     }
 
     /**
@@ -33,7 +33,16 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+            'category_id' => 'required',
+        ]);
+        $article = Article::create($request->all());
+        return redirect('/articles')->with('state ', "created done");
+
+
     }
 
     /**
@@ -63,19 +72,27 @@ class ArticleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $request->validate([
+            'title' => 'required',
+            'body' => 'required',
+            'category_id' => 'required',
+        ]);
+        $article = Article::find($id);
+        $article->update($request->all());
     }
 
     /**
      * Remove the specified resource from storage.
      */
 
-     public function softdelete() {
+    public function softdelete()
+    {
 
         $articles = Article::onlyTrashed()->get();
         return view('articles.softdelete', compact('articles'));
 
-     }
+    }
     public function destroy(string $id)
     {
         $article = Article::findOrFail($id);
