@@ -36,8 +36,10 @@ class ArticleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'content' => 'required',
+            'title_ar' => 'required',
+            'title_en' => 'required',
+            'content_ar' => 'required',
+            'content_en' => 'required',
             'category_id' => 'required',
             'images' => 'required',
             'videos' => 'nullable',
@@ -85,6 +87,14 @@ class ArticleController extends Controller
     {
         $article = Article::findOrFail($id);
 
+        // if (app()->getLocale() == 'ar') {
+        //     $title = $article->title_ar;
+        //     $content = $article->content_ar;
+        // } else {
+        //     $title = $article->title_en;
+        //     $content = $article->content_en;
+        // }
+
         return view('articles.show', compact('article'));
 
     }
@@ -106,31 +116,42 @@ class ArticleController extends Controller
     public function update(Request $request, string $id)
     {
 
-        $request->validate([
-            'title' => 'required',
-            'body' => 'required',
-            'category_id' => 'required',
-        ]);
-        $article = Article::find($id);
-        $article->update($request->all());
+        // $request->validate([
+        //     'title' => 'required',
+        //     'body' => 'required',
+        //     'category_id' => 'required',
+        // ]);
+        // $article = Article::find($id);
+        // $article->update($request->all());
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
 
-    public function softdelete()
+    public function restore(string $id)
     {
 
-        $articles = Article::onlyTrashed()->get();
-        return view('articles.softdelete', compact('articles'));
+        $article = Article::onlyTrashed()->findOrFail($id);
+        $article->restore();
+        return redirect('/articles')->with('state ', "restored done");
 
+    }
+    public function softdelete(string $id)
+    {
+
+        $article = Article::find($id);
+        $article->delete();
+        return redirect('/articles')->with('state ', "deleted done");
     }
     public function destroy(string $id)
     {
-        $article = Article::findOrFail($id);
-        $article->delete();
 
+        $article = Article::onlyTrashed()->findOrFail($id);
+        $article->forceDelete();
         return redirect('/articles')->with('state ', "deleted done");
+
     }
+
 }

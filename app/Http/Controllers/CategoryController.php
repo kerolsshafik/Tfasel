@@ -25,6 +25,20 @@ class CategoryController extends Controller
         return view('categories.create');
     }
 
+
+    public function show($id)
+    {
+        $cat = Category::find($id);
+        if (app()->getLocale() == 'ar') {
+            $name = $cat->name_ar;
+        } else {
+            $name = $cat->name_en;
+        }
+
+        return view('categories.show', compact('name'));
+
+    }
+
     /**
      * Store a newly created resource in storage.
      */
