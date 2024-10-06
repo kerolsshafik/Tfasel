@@ -12,10 +12,12 @@ return new class () extends Migration {
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('content');
+            $table->string('title_ar');
+            $table->string('title_en');
+            $table->string('content_ar');
+            $table->string('content_en');
             $table->string('slug');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('user_id')->constrained()->nullable();
             $table->foreignId('category_id')->constrained();
             $table->boolean('is_published')->default(0);
             $table->softDeletes();

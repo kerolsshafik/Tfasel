@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\HasMedia;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Article extends Model
+class Article extends Model implements HasMedia
 {
     use HasFactory;
+    use  InteractsWithMedia;
+
     use SoftDeletes;
 
     /**
@@ -56,12 +60,15 @@ class Article extends Model
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('big_images')->singleFile(); // Only one big image per article
-        $this->addMediaCollection('small_images'); // Multiple small images per article
-        $this->addMediaCollection('videos');                    // For the videos
+        $this->addMediaCollection('big_images')
+            ->singleFile();
+        // Set the path for small images
+        $this->addMediaCollection('small_images');
 
+        // Set the path for videos
+        $this->addMediaCollection('videos')            ->singleFile()
+        ;
     }
-
     public function getWishlistAttribute()
     {
         // Custom logic to generate the 'wishlist' value

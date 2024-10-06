@@ -26,6 +26,7 @@ class ArticleController extends Controller
     {
 
         $categories = Category::all();
+
         return view('articles.create', compact('categories'));
     }
 
@@ -34,7 +35,6 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'title' => 'required',
             'content' => 'required',
@@ -42,50 +42,40 @@ class ArticleController extends Controller
             'images' => 'required',
             'videos' => 'nullable',
             'images.*' => 'file|mimes:jpg,jpeg,png,gif|max:10240', // Images up to 10MB
-            'videos.*' => 'nullable|file|mimes:mp4,avi,mov|max:51200', // Videos up to 50MB
-
+            'videos.*' => 'nullable|file|max:51200', // Videos up to 50MB
         ]);
-        // create all without images ,videos
+
+        // Create the slug from the title
         $slug = Str::slug($request->title);
 
         // Create the article and exclude 'images' and 'videos' from the request data
         $article = Article::create(array_merge($request->except(['images', 'videos']), ['slug' => $slug]));
 
-        // get array of images
-
+        // // // Handle images
+        // Handle images
         $images = $request->file('images');
-
-        // get array of videos
-        $videoFiles = $request->file('videos');
-
-        dd($images, $videoFiles);
-
         if ($images) {
-            //doing for as images is array
             foreach ($images as $index => $image) {
-                // If it's the first image, add it to the 'big' media collection
+                // Set the path based on whether it's the first image or not
                 if ($index == 0) {
-                    $article->addMedia($image)
-                        ->toMediaCollection('big_images');
+                    $article->addMedia($image)->toMediaCollection('big_images');
+                } if ($article->getMedia('small_images')->count() < 5) {
+                    $article->addMedia($image)->toMediaCollection('small_images');
                 } else {
-                    // Add the rest of the images to the 'small_images' media collection
-                    $article->addMedia($image)
-                        ->toMediaCollection('small_images');
+                    return redirect()->back()->withErrors(['images' => 'You can only upload up to 5 small images.']);
                 }
             }
         }
-        // upload videos will get array of videos
-        if ($videoFiles) {
 
+        // Handle videos
+        $videoFiles = $request->file('videos');
+        if ($videoFiles) {
             foreach ($videoFiles as $file) {
-                $article->addMedia($file)
-                    ->toMediaCollection('videos');
+                $article->addMedia($file)->toMediaCollection('videos');
             }
         }
 
         return redirect('/articles')->with('status', 'Article created successfully with images and videos');
-
-
     }
 
     /**
