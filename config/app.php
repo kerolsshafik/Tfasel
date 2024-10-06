@@ -84,6 +84,10 @@ return [
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'en_US'),
 
+    // This will fallback to English if a translation is missing
+
+    'locales' => ['en', 'ar'],
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key
