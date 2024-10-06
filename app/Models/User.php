@@ -9,7 +9,8 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -29,8 +30,18 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
-    ];
+        'remember_token',];
+
+    public function isAdmin()
+    {
+        return $this->status == 'admin';
+    }
+
+    public function isWriter()
+    {
+        return $this->status == 'writer';
+    }
+
 
     /**
      * Get the attributes that should be cast.

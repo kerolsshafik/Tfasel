@@ -22,12 +22,15 @@ class Article extends Model implements HasMedia
      * @var array
      */
     protected $fillable = [
-        'title',
-        'content',
+        'title_ar',
+        'title_en',
+        'content_ar',
+        'content_en',
         'slug',
         'user_id',
         'category_id',
         'is_published',
+        'is_updated',
     ];
 
     protected $appends = ['Wishlist',];

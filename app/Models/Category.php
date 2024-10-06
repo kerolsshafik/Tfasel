@@ -12,7 +12,7 @@ class Category extends Model
     use HasFactory;
     use InteractsWithMedia ;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name_ar,name_en'];
     protected $table = 'categories';
 
 

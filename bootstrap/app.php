@@ -11,7 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->alias([
+            // Status middleware
+            'status' => \App\Http\Middleware\StatusMiddleware::class,
+
+        ]);
+
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
