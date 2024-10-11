@@ -9,6 +9,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Route::middleware(['auth', \Laravel\Telescope\Http\Middleware\Authorize::class])
+//     ->get('telescope', function () {
+//         return view('telescope');
+//     });
+
 
 
 Route::get('locale/{locale}', function ($locale) {
@@ -34,10 +39,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 // Admin Routes
 Route::group(['middleware' => ['role:admin']], function () {
     Route::resource('categories', CategoryController::class);
     Route::resource('articles', ArticleController::class);
+
+});
+
+Route::group(['middleware' => [ 'role:admin', \Laravel\Telescope\Http\Middleware\Authorize::class]], function () {
+    Route::get('/telescope', function () {
+        // Only authenticated users with the 'admin' role can access this route
+        return view('telescope');
+    });
 });
 
 // Writer Routes
