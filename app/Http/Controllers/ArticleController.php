@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Support\Str;
@@ -15,8 +16,9 @@ class ArticleController extends Controller
     public function index()
     {
         $article = Article::all();
+        $users = User::all();
 
-        return view('articles.index', compact('article'));
+        return view('articles.index', compact('article', 'users'));
     }
 
     /**
@@ -26,8 +28,10 @@ class ArticleController extends Controller
     {
 
         $categories = Category::all();
+        $users = User::all();
 
-        return view('articles.create', compact('categories'));
+
+        return view('articles.create', compact('categories', 'users'));
     }
 
     /**
@@ -41,6 +45,7 @@ class ArticleController extends Controller
             'content_ar' => 'required',
             'content_en' => 'required',
             'category_id' => 'required',
+            'user_id' => 'required',
             'images' => 'required',
             'videos' => 'nullable',
             'images.*' => 'file|mimes:jpg,jpeg,png,gif|max:10240', // Images up to 10MB
@@ -53,18 +58,22 @@ class ArticleController extends Controller
         // Create the article and exclude 'images' and 'videos' from the request data
         $article = Article::create(array_merge($request->except(['images', 'videos']), ['slug' => $slug]));
 
-        // // // Handle images
         // Handle images
         $images = $request->file('images');
         if ($images) {
+            $smallImagesCount = $article->getMedia('small_images')->count();
             foreach ($images as $index => $image) {
-                // Set the path based on whether it's the first image or not
                 if ($index == 0) {
+                    // First image goes to 'big_images' collection
                     $article->addMedia($image)->toMediaCollection('big_images');
-                } if ($article->getMedia('small_images')->count() < 5) {
-                    $article->addMedia($image)->toMediaCollection('small_images');
                 } else {
-                    return redirect()->back()->withErrors(['images' => 'You can only upload up to 5 small images.']);
+                    // Limit small images to a maximum of 5
+                    if ($smallImagesCount < 5) {
+                        $article->addMedia($image)->toMediaCollection('small_images');
+                        $smallImagesCount++;
+                    } else {
+                        return redirect()->back()->withErrors(['images' => 'You can only upload up to 5 small images.']);
+                    }
                 }
             }
         }
@@ -79,6 +88,7 @@ class ArticleController extends Controller
 
         return redirect('/articles')->with('status', 'Article created successfully with images and videos');
     }
+
 
     /**
      * Display the specified resource.

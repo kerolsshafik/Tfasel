@@ -42,7 +42,7 @@ Route::group(['middleware' => ['role:admin']], function () {
 
 // Writer Routes
 Route::group(['middleware' => ['role:writer']], function () {
-    Route::resource('articles', ArticleController::class);
+    Route::resource('articles', controller: ArticleController::class);
 });
 
 

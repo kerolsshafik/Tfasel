@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
+
 </head>
 
 <body>
@@ -30,17 +32,42 @@
         <form action="{{ route('articles.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
+            <!-- Category Field -->
+            <div class="form-group">
+                <label for="user_id">Users</label>
+                <select class="form-control" id="user_id" name="user_id" required>
+                    <option value="">Select user</option>
+                    @foreach ($users as $user)
+                        <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
+                            {{ $user->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             <!-- Title Field -->
             <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}"
+                <label for="title_ar">Title_AR</label>
+                <input type="text" class="form-control" id="title_ar" name="title_ar" value="{{ old('title_ar') }}"
                     required>
             </div>
 
             <!-- Body Field -->
             <div class="form-group">
-                <label for="content">content</label>
-                <textarea class="form-control" id="content" name="content" rows="5" required>{{ old('content') }}</textarea>
+                <label for="content_ar">content_AR</label>
+                <textarea class="form-control ckeditor" name="content_ar" rows="5" required>{{ old('content_ar') }}</textarea>
+            </div>
+            <!-- Title Field -->
+            <div class="form-group">
+                <label for="title_en">Title_EN</label>
+                <input type="text" class="form-control" id="title_en" name="title_en" value="{{ old('title_en') }}"
+                    required>
+            </div>
+
+            <!-- Body Field -->
+            <div class="form-group">
+                <label for="content_en">content_EN</label>
+                <textarea class="form-control ckeditor" name="content_en" rows="5" required>{{ old('content_en') }}</textarea>
             </div>
 
             <!-- Category Field -->
@@ -49,8 +76,9 @@
                 <select class="form-control" id="category_id" name="category_id" required>
                     <option value="">Select Category</option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
-                            {{ $category->name }}
+                        <option value="{{ $category->id }}"
+                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name_en }}
                         </option>
                     @endforeach
                 </select>
@@ -74,6 +102,16 @@
         </form>
     </div>
     {{-- @endsection --}}
+    <script>
+        document.querySelectorAll('textarea.ckeditor').forEach((editorEl) => {
+            ClassicEditor
+                .create(editorEl)
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
 </body>
+
 
 </html>

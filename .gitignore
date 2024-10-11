@@ -3,6 +3,7 @@
 /public/build
 /public/hot
 /public/storage
+DEPI-Project-Laravel\storage\app\public
 /storage/*.key
 /vendor
 .env
