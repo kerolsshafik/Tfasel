@@ -106,6 +106,12 @@
         document.querySelectorAll('textarea.ckeditor').forEach((editorEl) => {
             ClassicEditor
                 .create(editorEl)
+                .then(editor => {
+                    editor.model.document.on('change:data', () => {
+                        // Update the hidden textarea with the data from CKEditor
+                        editorEl.value = editor.getData();
+                    });
+                })
                 .catch(error => {
                     console.error(error);
                 });
