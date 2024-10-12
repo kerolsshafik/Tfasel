@@ -9,11 +9,15 @@
                         <x-application-logo class="block w-auto text-gray-800 fill-current h-9 dark:text-gray-200" />
                     </a>
                 </div>
+                <!-- Navigation Links -->
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+
+                </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('TFASEL on times') }}
                     </x-nav-link>
                 </div>
             </div>
