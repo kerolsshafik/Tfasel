@@ -60,7 +60,7 @@
         </main>
     </div>
 
-    @yield('js')
+    @stack('js')
 </body>
 
 </html>

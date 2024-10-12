@@ -1,20 +1,10 @@
-{{-- @extends('layouts.app') --}}
+@extends('layouts.app')
 
-{{-- @section('content') --}}
-<!DOCTYPE html>
-<html lang="en">
+@section('title')
+    Create Article
+@endsection
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.0/classic/ckeditor.js"></script>
-
-</head>
-
-<body>
-
+@section('content')
 
     <div class="container">
         <h2>Create New Article</h2>
@@ -76,8 +66,7 @@
                 <select class="form-control" id="category_id" name="category_id" required>
                     <option value="">Select Category</option>
                     @foreach ($categories as $category)
-                        <option value="{{ $category->id }}"
-                            {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                             {{ $category->name_en }}
                         </option>
                     @endforeach
@@ -101,7 +90,9 @@
             <button type="submit" class="btn btn-primary">Create Article</button>
         </form>
     </div>
-    {{-- @endsection --}}
+@endsection
+
+@push('js')
     <script>
         document.querySelectorAll('textarea.ckeditor').forEach((editorEl) => {
             ClassicEditor
@@ -117,7 +108,4 @@
                 });
         });
     </script>
-</body>
-
-
-</html>
+@endpush

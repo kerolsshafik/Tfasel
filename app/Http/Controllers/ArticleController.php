@@ -15,10 +15,11 @@ class ArticleController extends Controller
      */
     public function index()
     {
+        // dd("S");
         $article = Article::all();
         $users = User::all();
 
-        return view('articles.index', compact('article', 'users'));
+        return view('Writer.articles.index', compact('article', 'users'));
     }
 
     /**
