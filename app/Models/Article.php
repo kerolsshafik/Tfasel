@@ -70,10 +70,10 @@ class Article extends Model implements HasMedia
     public function getWishlistAttribute()
     {
         // Custom logic to generate the 'wishlist' value
-        \Log::info('start' . now());
-        return auth()->check() && Wishlist::where('user_id', auth('api')->id())
-        ->where('media_id', $this->media_id) // استخدم الـ id الخاص بالـ media الحالية
-        ->exists();
+        // \Log::info('start' . now());
+        // return auth()->check() && Wishlist::where('user_id', auth('api')->id())
+        // ->where('media_id', $this->media_id) // استخدم الـ id الخاص بالـ media الحالية
+        // ->exists();
         // For example, retrieving a related wishlist or some computed value
     }
 

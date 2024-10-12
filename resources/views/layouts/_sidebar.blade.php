@@ -1,7 +1,7 @@
 <!-- Mobile Sidebar -->
-<aside id="mobile-sidebar"
-    class="fixed inset-y-0 left-0 z-20 flex-shrink-0 w-64 overflow-y-auto transition-transform transform -translate-x-full bg-white dark:bg-gray-800 md:hidden"
+<aside id="mobile-sidebar" class="fixed top-0 left-0 z-20 w-64 h-full bg-white dark:bg-gray-800 md:hidden"
     aria-hidden="true">
+
     <div class="py-4 text-gray-500 dark:text-gray-400">
         <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
             Windmill
@@ -93,7 +93,7 @@
 </aside>
 
 <!-- Desktop Sidebar -->
-<aside class="z-20 flex-shrink-0 hidden w-64 overflow-y-auto bg-white dark:bg-gray-800 md:block">
+<aside class="fixed top-0 left-0 z-20 hidden w-64 h-full bg-white dark:bg-gray-800 md:block">
     <div class="py-4 text-gray-500 dark:text-gray-400">
         <a class="ml-6 text-lg font-bold text-gray-800 dark:text-gray-200" href="#">
             Windmill
