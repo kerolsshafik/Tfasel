@@ -18,8 +18,10 @@ class ArticleController extends Controller
         // dd("S");
         $article = Article::all();
         $users = User::all();
+        $categories = Category::all();
+        return view('Writer.articles.index', compact('article', 'users', 'categories'));
 
-        return view('Writer.articles.index', compact('article', 'users'));
+
     }
 
     /**
