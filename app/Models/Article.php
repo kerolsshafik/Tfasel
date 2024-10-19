@@ -63,9 +63,10 @@ class Article extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('big_images'); // Remove singleFile() if multiple images are allowed
+        $this->addMediaCollection('big_images')->singleFile();  // Remove singleFile() if multiple images are allowed
         $this->addMediaCollection('small_images');
-        $this->addMediaCollection('videos'); // Only add singleFile() if you want to allow one video per article
+        $this->addMediaCollection('videos')->singleFile();
+        ; // Only add singleFile() if you want to allow one video per article
     }
     public function getWishlistAttribute()
     {

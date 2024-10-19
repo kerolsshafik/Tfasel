@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    {{-- <title>{{ config('app.name', 'Laravel') }}</title> --}}
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,12 +15,18 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/30.2.0/ckeditor5.css" />
 
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         /* Custom styles for smooth transitions */
         #mobile-sidebar {
             transition: transform 0.3s ease-in-out;
+        }
+
+        .ck {
+            height: 200px;
+            max-width: inherit;
         }
     </style>
 
@@ -56,27 +62,18 @@
 
         <!-- Page Content -->
         <main>
-            <!-- Toggle Button for Mobile Sidebar -->
-            <button id="toggle-button" class="p-2 text-gray-800 md:hidden dark:text-gray-200">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>
+
             <div class="flex">
                 <!-- Include Sidebar -->
                 @include('layouts._sidebar')
                 <div class="container" style="width: 80%;">
-
                     @yield('content')
                 </div>
             </div>
-
-
         </main>
     </div>
 
-    @stack('js')
+    <script src="https://cdn.ckeditor.com/ckeditor5/36.0.0/classic/ckeditor.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
         integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
@@ -87,6 +84,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
 
+    @yield('js')
 </body>
 
 </html>

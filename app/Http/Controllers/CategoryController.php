@@ -35,7 +35,7 @@ class CategoryController extends Controller
             $name = $cat->name_en;
         }
 
-        return view('categories.show', compact('name'));
+        return view('categories.show', compact('cat'));
 
     }
 

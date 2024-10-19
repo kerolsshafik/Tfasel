@@ -7,20 +7,32 @@ use App\Models\Article;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ValidateArticleRequest;
 
 class ArticleController extends Controller
 {
+    /**
+     * Update the specified resource in storage.
+     */
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $articles = Article::paginate(10);
+        $user = Auth::user();
+
+        // dd($user);
+
+        if ($user->status == 'admin') {
+            $articles = Article::paginate(15);
+        } elseif ($user->status == 'writer') {
+            $articles = Article::where('user_id', $user->id)->paginate(10);
+        }
+        // $articles = Article::paginate(10);
         // $categories = Category::all();
         // dd($articles);
         return view('Writer.articles.index', compact('articles', ));
-
-
     }
 
     /**
@@ -33,29 +45,31 @@ class ArticleController extends Controller
         $users = User::all();
 
 
-        return view('articles.create', compact('categories', 'users'));
+        return view('Writer.articles.create', compact('categories', 'users'));
     }
+
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ValidateArticleRequest $request)
     {
-        $request->validate([
-            'title_ar' => 'required',
-            'title_en' => 'required',
-            'content_ar' => 'required',
-            'content_en' => 'required',
-            'category_id' => 'required',
-            'user_id' => 'required',
-            'images' => 'required',
-            'videos' => 'nullable',
-            'images.*' => 'file|mimes:jpg,jpeg,png,gif|max:10240', // Images up to 10MB
-            'videos.*' => 'nullable|file|max:51200', // Videos up to 50MB
-        ]);
+
+        $user = Auth::user();
+        if ($user->status == 'admin') {
+            $request->merge(['is_published' => '1']);
+        }
 
         // Create the slug from the title
         $slug = Str::slug($request->title);
+
+        // Check if the slug already exists
+        $article = Article::where('slug', $slug)->first();
+        if ($article) {
+            $slug = $slug . '-' . $article->id;
+        }
+        $request->merge(['slug' => $slug, 'user_id' => $user->id]);
+        // dd($request->all());
 
         // Create the article and exclude 'images' and 'videos' from the request data
         $article = Article::create(array_merge($request->except(['images', 'videos']), ['slug' => $slug]));
@@ -95,19 +109,9 @@ class ArticleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Article $article)
     {
-        $article = Article::findOrFail($id);
-
-        // if (app()->getLocale() == 'ar') {
-        //     $title = $article->title_ar;
-        //     $content = $article->content_ar;
-        // } else {
-        //     $title = $article->title_en;
-        //     $content = $article->content_en;
-        // }
-
-        return view('articles.show', compact('article'));
+        return view('Writer.articles.show', compact('article'));
 
     }
 
@@ -117,26 +121,55 @@ class ArticleController extends Controller
     public function edit(string $id)
     {
         $article = Article::findOrFail($id);
+        $categories = Category::all();
 
-        return view('articles.edit', compact('article'));
+        return view('Writer.articles.edit', compact('article', 'categories'));
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(ValidateArticleRequest $request, Article $article)
     {
+        // Update the article's details
+        $user = Auth::user();
+        if ($user->status == 'admin') {
+            $request->merge(['is_updated' => '1']);
+        }
+        if ($user->status == 'writer') {
+            $request->merge(['is_updated' => '0']);
+        }
 
-        // $request->validate([
-        //     'title' => 'required',
-        //     'body' => 'required',
-        //     'category_id' => 'required',
-        // ]);
-        // $article = Article::find($id);
-        // $article->update($request->all());
+        $article->update($request->all());
+        // Handle image uploads
+        if ($request->hasFile('images')) {
+            // Clear existing media (optional)
+            $article->clearMediaCollection('big_images');
+            $article->clearMediaCollection('small_images');
 
+            foreach ($request->file('images') as $index => $image) {
+                if ($index === 0) {
+                    // First image goes to 'big_images' collection
+                    $article->addMedia($image)->toMediaCollection('big_images');
+                } else {
+                    // Add to 'small_images' collection
+                    $article->addMedia($image)->toMediaCollection('small_images');
+                }
+            }
+        }
+
+        // Handle video uploads
+        if ($request->hasFile('videos')) {
+            // Clear existing media (optional)
+            $article->clearMediaCollection('videos');
+
+            foreach ($request->file('videos') as $video) {
+                $article->addMedia($video)->toMediaCollection('videos');
+            }
+        }
+
+        // Redirect or return a response
+        return redirect()->route('articles.index')->with('success', 'Article updated successfully.');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -164,6 +197,25 @@ class ArticleController extends Controller
         $article->forceDelete();
         return redirect('/articles')->with('state ', "deleted done");
 
+    }
+
+
+    public function togglePublish($id)
+    {
+        $article = Article::findOrFail($id);
+        $article->is_published = !$article->is_published; // Toggle the value
+        $article->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Article publish status updated!']);
+    }
+
+    public function toggleUpdate($id)
+    {
+        $article = Article::findOrFail($id);
+        $article->is_updated = !$article->is_updated; // Toggle the value
+        $article->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Article update status updated!']);
     }
 
 }

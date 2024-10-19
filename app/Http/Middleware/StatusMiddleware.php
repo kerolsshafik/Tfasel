@@ -16,9 +16,11 @@ class StatusMiddleware
      */
     public function handle(Request $request, Closure $next, $status): Response
     {
-        if (!Auth::check() || Auth::user()->status !== $status) {
+        $allowedStatuses = explode('|', $status);
+        if (!Auth::check() || !in_array(Auth::user()->status, $allowedStatuses)) {
             abort(403, 'Unauthorized action.');
         }
+
         return $next($request);
     }
 }

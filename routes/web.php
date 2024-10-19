@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ProfileController;
@@ -26,37 +27,31 @@ Route::get('locale/{locale}', function ($locale) {
 
 
 
-Route::middleware(['auth','status:writer'])->group(function () {
+Route::middleware(['auth','status:writer|admin'])->group(function () {
     Route::get('/dashboard', [ProfileController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('articles', ArticleController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('users', UserController::class);
+
+    Route::patch('/articles/{id}/toggle-publish', [ArticleController::class, 'togglePublish'])->name('articles.togglePublish');
+    Route::patch('/articles/{id}/toggle-update', [ArticleController::class, 'toggleUpdate'])->name('articles.toggleUpdate');
+
 
 });
 
 
-// Admin Routes
-// Route::group(['middleware' => ['status:admin']], function () {
-//     Route::resource('categories', CategoryController::class);
-//     Route::resource('articles', ArticleController::class);
-
-// });
-
-
 // /telescope
-Route::group(['middleware' => [ 'status:admin', \Laravel\Telescope\Http\Middleware\Authorize::class]], function () {
+Route::group(['middleware' => [ 'auth','status:admin', \Laravel\Telescope\Http\Middleware\Authorize::class]], function () {
     Route::get('/telescope', function () {
         // Only authenticated users with the 'admin' role can access this route
         return view('telescope');
     });
 });
 
-// Writer Routes
-// Route::group(['middleware' => ['status:writer']], function () {
-//     Route::resource('articles', controller: ArticleController::class);
-// });
 
 
 require __DIR__.'/auth.php';
