@@ -58,6 +58,8 @@ class ArticleController extends Controller
         $user = Auth::user();
         if ($user->status == 'admin') {
             $request->merge(['is_published' => '1']);
+            $request->merge(['is_updated' => '1']);
+
         }
 
         // Create the slug from the title

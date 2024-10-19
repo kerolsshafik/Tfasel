@@ -14,11 +14,11 @@ return new class () extends Migration {
             $table->id();
             $table->string('title_ar');
             $table->string('title_en');
-            $table->string('content_ar');
-            $table->string('content_en');
+            $table->mediumText('content_ar');
+            $table->mediumText('content_en', );
             $table->string('slug');
             $table->foreignId('user_id')->constrained()->nullable();
-            $table->foreignId('category_id')->constrained();
+            $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->boolean('is_published')->default(0);
             $table->softDeletes();
             $table->timestamps();

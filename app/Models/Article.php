@@ -48,7 +48,15 @@ class Article extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    protected static function boot()
+    {
+        parent::boot();
 
+        // This will cascade delete all associated media when the article is deleted
+        static::deleting(function ($article) {
+            $article->clearMediaCollection();
+        });
+    }
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('big_images')->singleFile();  // Remove singleFile() if multiple images are allowed

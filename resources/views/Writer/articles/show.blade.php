@@ -25,6 +25,10 @@
                                     <th scope="row">Title (English)</th>
                                     <td>{{ $article->title_en }}</td>
                                 </tr>
+                                <tr>
+                                    <th scope="row">Category </th>
+                                    <td>{{ $article->category_id }}</td>
+                                </tr>
 
                                 <!-- Article Content in Arabic -->
                                 <tr>
