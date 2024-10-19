@@ -15,15 +15,16 @@
                             @if (session('status'))
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     {{ session('status') }}
+                                    {{ session('success') }}
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true"></span>
+                                        <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                             @endif
                             @if (session('error'))
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                     {{ session('error') }}
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <button type="button" class="close " data-dismiss="alert" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -33,10 +34,13 @@
                             <a href="{{ route('articles.create') }}" class="mb-3 btn btn-primary">
                                 <i class="fas fa-plus"></i> Create Article
                             </a>
-                            <a href="" class="mb-3 btn btn-outline-dark">
-                                <i class="fas fa-plus"></i> Trush
-                            </a>
 
+                            <!-- Trush Button -->
+                            @if (Auth::user()->isAdmin())
+                                <a href="{{ route('articles.view_softdelete') }}" class="mb-3 btn btn-outline-dark">
+                                    <i class="fas fa-plus"></i> Trush
+                                </a>
+                            @endif
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
@@ -100,12 +104,11 @@
 
                                                     <!-- Delete button for admin only -->
                                                     @if (Auth::user()->isAdmin())
-                                                        <form action="{{ route('articles.destroy', $article) }}" method="POST"
-                                                            style="display:inline;">
+                                                        <form action="{{ route('articles.softdelete', $article) }}"
+                                                            method="POST" style="display:inline;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-outline-danger"
-                                                                onclick="return confirm('Are you sure you want to delete this article?');">
+                                                            <button type="submit" class="btn btn-outline-danger">
                                                                 <i class="fas fa-trash-alt"></i> Soft Delete
                                                             </button>
                                                         </form>
@@ -143,54 +146,6 @@
 @endsection
 
 @section('js')
-    <script>
-        function togglePublish(articleId, is_published) {
-            alert();
-            let newStatus = is_published ? 0 : 1; // Toggle status
-            $.ajax({
-                url: `/articles/${articleId}/toggle-publish`,
-                type: 'PATCH',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    is_published: newStatus
-                },
-                success: function(response) {
-                    location.reload(); // Reload the page to see the updated status
-                },
-                error: function(xhr) {
-                    alert('Something went wrong. Please try again.');
-                }
-            });
 
-            // axios.put('/api/articles/' + id, {
-            //     is_published: !is_published
-            // }).then(response => {
-            //     console.log(response.data);
-            //     // Update the checkbox value
-            //     document.getElementById('is_published').checked = !is_published;
-            // }).catch(error => {
-            //     console.error(error);
-            // });
-        }
-
-        function toggleUpdate(articleId, is_updated) {
-            let newStatus = is_updated ? 0 : 1; // Toggle status
-            $.ajax({
-                url: `/articles/${articleId}/toggle-update`,
-                type: 'PATCH',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    is_updated: newStatus
-                },
-                success: function(response) {
-                    location.reload(); // Reload the page to see the updated status
-                },
-                error: function(xhr) {
-                    alert('Something went wrong. Please try again.');
-                }
-            });
-
-        }
-    </script>
 
 @endsection

@@ -37,18 +37,6 @@ class Article extends Model implements HasMedia
 
 
     // Automatically generate the slug when creating or updating
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($article) {
-            $article->slug = Str::slug($article->title);
-        });
-
-        static::updating(function ($article) {
-            $article->slug = Str::slug($article->title);
-        });
-    }
 
     public function categoey()
     {

@@ -61,8 +61,7 @@ class ArticleController extends Controller
         }
 
         // Create the slug from the title
-        $slug = Str::slug($request->title);
-
+        $slug = Str::slug($request->title_ar);
         // Check if the slug already exists
         $article = Article::where('slug', $slug)->first();
         if ($article) {
@@ -138,7 +137,9 @@ class ArticleController extends Controller
             $request->merge(['is_updated' => '0']);
         }
 
-        $article->update($request->all());
+        $slug = Str::slug($request->title_ar);
+
+        $article->update(array_merge($request->all(), ['slug' => $slug]));
         // Handle image uploads
         if ($request->hasFile('images')) {
             // Clear existing media (optional)
@@ -175,27 +176,44 @@ class ArticleController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function restore(string $id)
+    public function view_softdelete()
     {
 
+        $articles = Article::onlyTrashed()->paginate(10);
+        return view('Writer.articles.softdelete', compact('articles'));
+    }
+
+
+    public function restore(string $id)
+    {
+        // dd("sdf");
         $article = Article::onlyTrashed()->findOrFail($id);
         $article->restore();
-        return redirect('/articles')->with('state ', "restored done");
+        return redirect('/articles')->with('status ', "restored done");
 
     }
+    public function restoreall()
+    {
+        // dd("sdf");
+        Article::onlyTrashed()->restore();
+        return redirect('/articles')->with('status ', "restored done");
+
+    }
+
     public function softdelete(string $id)
     {
 
         $article = Article::find($id);
         $article->delete();
-        return redirect('/articles')->with('state ', "deleted done");
+        return  redirect()->back()->with('status ', "Soft deleted done");
     }
+
     public function destroy(string $id)
     {
-
-        $article = Article::onlyTrashed()->findOrFail($id);
+        // dd("sdfasdf");
+        $article = Article::findOrFail($id);
         $article->forceDelete();
-        return redirect('/articles')->with('state ', "deleted done");
+        return redirect()->back()->with('status ', "deleted done");
 
     }
 

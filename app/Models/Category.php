@@ -12,9 +12,15 @@ class Category extends Model
     use HasFactory;
     use InteractsWithMedia ;
 
-    protected $fillable = ['name_ar,name_en'];
-    protected $table = 'categories';
+    protected $fillable = [
+        'name_ar','name_en','slug'];
 
+    protected $table = 'categories';
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('images')->singleFile(); // Add your media collection
+        $this->addMediaCollection('videos'); // Add another collection for videos
+    }
 
     // public function articles()
     // {

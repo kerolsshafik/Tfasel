@@ -17,7 +17,7 @@
                         <input type="text" class="form-control" id="title_ar" name="title_ar"
                             value="{{ old('title_ar') }}" required>
                         @error('title_ar')
-                            <div class="invalid-feedback">
+                            <div class="text-danger">
                                 {{ $message }}
                             </div>
                         @enderror
@@ -35,7 +35,7 @@
                         <input type="text" class="form-control" id="title_en" name="title_en"
                             value="{{ old('title_en') }}" required>
                         @error('title_en')
-                            <div class="invalid-feedback">
+                            <div class="text-danger">
                                 {{ $message }}
                             </div>
                         @enderror
@@ -60,7 +60,7 @@
                             @endforeach
                         </select>
                         @error('category_id')
-                            <div class="invalid-feedback">
+                            <div class="text-danger">
                                 {{ $message }}
                             </div>
                         @enderror

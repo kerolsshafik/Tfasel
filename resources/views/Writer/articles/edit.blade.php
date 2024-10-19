@@ -9,14 +9,14 @@
                 <b>Update Article</b>
                 <form action="{{ route('articles.update', $article->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
-
+                    @method('PUT')
                     <!-- Title Field (Arabic) -->
                     <div class="mb-3">
                         <label for="title_ar">Title (Arabic)</label>
                         <input type="text" class="form-control" id="title_ar" name="title_ar"
                             value="{{ $article->title_ar }}" required>
                         @error('title_ar')
-                            <div class="invalid-feedback">
+                            <div class="text-danger">
                                 {{ $message }}
                             </div>
                         @enderror
@@ -34,7 +34,7 @@
                         <input type="text" class="form-control" id="title_en" name="title_en"
                             value="{{ $article->title_en }}" required>
                         @error('title_en')
-                            <div class="invalid-feedback">
+                            <div class="text-danger">
                                 {{ $message }}
                             </div>
                         @enderror
@@ -59,7 +59,7 @@
                             @endforeach
                         </select>
                         @error('category_id')
-                            <div class="invalid-feedback">
+                            <div class="text-danger">
                                 {{ $message }}
                             </div>
                         @enderror
@@ -69,8 +69,7 @@
                     <div class="mb-3">
                         <label for="images">Images (First image will be the main large image, others will be
                             smaller)</label>
-                        <input type="file" class="form-control" id="images" name="images[]" multiple accept="image/*"
-                            required>
+                        <input type="file" class="form-control" id="images" name="images[]" multiple accept="image/*">
 
                         @if ($errors->has('images'))
                             <div class="alert alert-danger">

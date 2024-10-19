@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -12,9 +13,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $cat = Category::all();
+        $cats = Category::paginate(10);
 
-        return view('categories.index', compact('cat'));
+        return view('admin.category.index', compact('cats'));
     }
 
     /**
@@ -22,22 +23,22 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('categories.create');
+        return view('admin.category.create');
     }
 
 
-    public function show($id)
-    {
-        $cat = Category::find($id);
-        if (app()->getLocale() == 'ar') {
-            $name = $cat->name_ar;
-        } else {
-            $name = $cat->name_en;
-        }
+    // public function show($id)
+    // {
+    //     $cat = Category::find($id);
+    //     if (app()->getLocale() == 'ar') {
+    //         $name = $cat->name_ar;
+    //     } else {
+    //         $name = $cat->name_en;
+    //     }
 
-        return view('categories.show', compact('cat'));
+    //     return view('categories.show', compact('cat'));
 
-    }
+    // }
 
     /**
      * Store a newly created resource in storage.
@@ -46,10 +47,20 @@ class CategoryController extends Controller
     {
 
         $request->validate([
-            'name' => 'required',
+            'name_ar' => 'required|min:3',
+            'name_en' => 'required|min:3',
+
         ]);
-        $cat = Category::create($request->all());
-        return redirect('/categories')->with('state ', "created done");
+        $slug = Str::slug($request->name_ar);
+
+        // dd($request->all());
+        Category::create([
+            'name_ar' => $request->name_ar,
+            'name_en' => $request->name_en,
+            'slug' => $slug,
+        ]);
+
+        return redirect('/categories')->with('status ', "created done");
 
     }
 
@@ -58,8 +69,8 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        $cat = Category::find($id);
-        return view('categories.edit', compact('cat'));
+        $caregory = Category::find($id);
+        return view('admin.category.edit', compact('caregory'));
     }
 
     /**
@@ -67,13 +78,21 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
+        // dd("sdf");
         $request->validate([
-            'name' => 'required',
+            'name_ar' => 'required|min:3',
+            'name_en' => 'required|min:3',
         ]);
         $cat = Category::find($id);
-        $cat->update($request->all());
-        return redirect('/categories')->with('state ', "updated done");
+        $slug = Str::slug($request->name_ar);
+        $cat->update(array_merge($request->all(), ['slug' => $slug]));
+
+        // $cat->update([
+        //     'name_ar' => $request->name_ar,
+        //     'name_en' => $request->name_en,
+        //     'slug' => $slug,
+        // ]);
+        return redirect('/categories')->with('status ', "updated done");
     }
 
     /**
@@ -81,8 +100,9 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
+        // dd("dfghd");
         $cat = Category::findOrFail($id);
         $cat->delete();
-        return redirect('/categories')->with('state ', "deleted done");
+        return redirect('/categories')->with('status ', "deleted done");
     }
 }
