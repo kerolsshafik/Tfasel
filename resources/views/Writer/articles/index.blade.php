@@ -16,7 +16,7 @@
                                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                                     {{ session('status') }}
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+                                        <span aria-hidden="true"></span>
                                     </button>
                                 </div>
                             @endif
@@ -63,19 +63,25 @@
                                                 <td>{{ Str::limit($article->content_en, 20) }}</td>
                                                 @if (Auth::user()->isAdmin())
                                                     <td>
-                                                        <a href="#"
-                                                            onclick="togglePublish({{ $article->id }}, {{ $article->is_published ? 1 : 0 }})">
-                                                            <input type="checkbox"
+                                                        <form action="{{ route('articles.togglePublish', $article->id) }}"
+                                                            method="POST" style="display:inline;">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <input type="checkbox" name="is_published"
+                                                                onchange="this.form.submit()"
                                                                 {{ $article->is_published ? 'checked' : '' }}>
-                                                        </a>
+                                                        </form>
                                                     </td>
 
                                                     <td>
-                                                        <a href="#"
-                                                            onclick="toggleUpdate({{ $article->id }}, {{ $article->is_updated ? 1 : 0 }})">
-                                                            <input type="checkbox" {{ $article->is_updated ? 'checked' : '' }}>
-
-                                                        </a>
+                                                        <form action="{{ route('articles.toggleUpdate', $article->id) }}"
+                                                            method="POST" style="display:inline;">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <input type="checkbox" name="is_updated"
+                                                                onchange="this.form.submit()"
+                                                                {{ $article->is_updated ? 'checked' : '' }}>
+                                                        </form>
                                                     </td>
                                                 @endif
                                                 <td>
@@ -139,7 +145,7 @@
 @section('js')
     <script>
         function togglePublish(articleId, is_published) {
-            // alert();
+            alert();
             let newStatus = is_published ? 0 : 1; // Toggle status
             $.ajax({
                 url: `/articles/${articleId}/toggle-publish`,

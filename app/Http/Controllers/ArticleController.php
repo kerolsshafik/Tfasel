@@ -202,11 +202,16 @@ class ArticleController extends Controller
 
     public function togglePublish($id)
     {
+        // dd($id);
         $article = Article::findOrFail($id);
         $article->is_published = !$article->is_published; // Toggle the value
         $article->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Article publish status updated!']);
+        if ($article->is_published == 1) {
+            return redirect()->back()->with('status', 'published is done');
+        }
+        return redirect()->back()->with('status', 'unpublished is done');
+
     }
 
     public function toggleUpdate($id)
@@ -215,7 +220,11 @@ class ArticleController extends Controller
         $article->is_updated = !$article->is_updated; // Toggle the value
         $article->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Article update status updated!']);
+        if ($article->is_updated == 1) {
+            return redirect()->back()->with('status', 'updated is done');
+        }
+        return redirect()->back()->with('status', 'unupdated is done');
+
     }
 
 }
