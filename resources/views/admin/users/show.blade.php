@@ -16,10 +16,6 @@
                             <tbody>
                                 <!-- Article Title in Arabic -->
                                 <tr>
-                                    <th scope="row">User (creator)</th>
-                                    <td>{{ $article->user->name }}</td>
-                                </tr>
-                                <tr>
                                     <th scope="row">Title (Arabic)</th>
                                     <td>{{ $article->title_ar }}</td>
                                 </tr>

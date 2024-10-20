@@ -112,6 +112,7 @@ class ArticleController extends Controller
      */
     public function show(Article $article)
     {
+        $user = User::where('id', $article->user_id)->firstOr();
         return view('Writer.articles.show', compact('article'));
 
     }
