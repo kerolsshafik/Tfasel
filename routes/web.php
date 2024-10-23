@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Front\HomeController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,17 +18,22 @@ Route::get('/', function () {
 
 
 Route::get('/ho', [ProfileController::class, 'ho'])->name('ho');
-
-Route::get('locale/{locale}', function ($locale) {
-    if (in_array($locale, ['en', 'ar'])) {
-        Session::put('locale', $locale);
-        App::setLocale($locale);
-    }
-    return redirect()->back();
-})->name('setLocale');
+Route::get('/homes', [HomeController::class, 'home'])->name('home');
 
 
 
+
+
+// Route::get('locale/{locale}', function ($locale) {
+//     if (in_array($locale, ['en', 'ar'])) {
+//         Session::put('locale', $locale);
+//         App::setLocale($locale);
+//     }
+//     return redirect()->back();
+// })->name('setLocale');
+
+
+// ------------------------------- Admin && WRITER --------------------------------------------------------------------//
 Route::middleware(['auth','status:writer|admin'])->group(function () {
     Route::get('/dashboard', [ProfileController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
