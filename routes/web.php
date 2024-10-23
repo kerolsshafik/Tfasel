@@ -16,6 +16,7 @@ Route::get('/', function () {
 //     });
 
 
+Route::get('/ho', [ProfileController::class, 'ho'])->name('ho');
 
 Route::get('locale/{locale}', function ($locale) {
     if (in_array($locale, ['en', 'ar'])) {
@@ -52,7 +53,7 @@ Route::group(['middleware' => [ 'auth','status:admin']], function () {
 
 
 // /telescope
-Route::group(['middleware' => [ 'auth','status:admin', \Laravel\Telescope\Http\Middleware\Authorize::class]], function () {
+Route::group(['middleware' => [ 'auth']], function () {
     Route::get('/telescope', function () {
         // Only authenticated users with the 'admin' role can access this route
         return view('telescope');

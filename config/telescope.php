@@ -1,7 +1,9 @@
 <?php
 
-use Laravel\Telescope\Http\Middleware\Authorize;
 use Laravel\Telescope\Watchers;
+use App\Http\Middleware\StatusMiddleware;
+use Laravel\Telescope\Http\Middleware\Authorize;
+use PHPUnit\Event\TestData\DataFromDataProvider;
 
 return [
 
@@ -94,6 +96,8 @@ return [
     'middleware' => [
         'web',
         Authorize::class,
+        'auth',
+
     ],
 
     /*

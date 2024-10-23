@@ -25,6 +25,12 @@ class ProfileController extends Controller
         return view('dashboard');
 
     }
+    public function ho(Request $request): View
+    {
+
+        return view('front.layout.app');
+    }
+
     public function edit(Request $request): View
     {
         return view('profile.edit', [
