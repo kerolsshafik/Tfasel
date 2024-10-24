@@ -5,7 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\MainController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -17,11 +17,7 @@ Route::get('/', function () {
 //     });
 
 
-Route::get('/ho', [ProfileController::class, 'ho'])->name('ho');
-Route::get('/homes', [HomeController::class, 'home'])->name('home');
-
-
-
+Route::get('/homes', [MainController::class, 'home'])->name('home');
 
 
 // Route::get('locale/{locale}', function ($locale) {

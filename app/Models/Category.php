@@ -22,8 +22,8 @@ class Category extends Model implements HasMedia
         $this->addMediaCollection('videos'); // Add another collection for videos
     }
 
-    // public function articles()
-    // {
-    //     return $this->hasMany(Article::class);
-    // }
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
 }

@@ -61,9 +61,15 @@
 
     <!-- content End -->
 
-
+    @dd($categories);
     <!-- footer start -->
     @include('front.layout.footer')
+    {{-- @include('front.layout.footer', [
+        'categories' => $categories,
+        'articles' => $articles,
+        'galleries' => $galleries,
+    ]) --}}
+
     <!-- Copyright start -->
     <!-- Copyright End -->
 

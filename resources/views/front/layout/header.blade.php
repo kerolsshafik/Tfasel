@@ -43,8 +43,11 @@
         <div class="container px-0">
             <nav class="navbar navbar-light navbar-expand-xl">
                 <a href="index.html" class="mt-3 navbar-brand">
-                    <p class="mb-2 text-primary display-6" style="line-height: 0;">Newsers</p>
+                    {{-- <p class="mb-2 text-primary display-6" style="line-height: 0;">Newsers</p>
                     <small class="text-body fw-normal" style="letter-spacing: 12px;">Nespaper</small>
+                </a> --}}
+                    <img src="img/logo3.jpg" class="img-zoominimg-fluid " alt=""
+                        style="height:80px; width:200px;">
                 </a>
                 <button class="px-3 py-2 navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse">
@@ -53,8 +56,6 @@
                 <div class="py-3 collapse navbar-collapse bg-light" id="navbarCollapse">
                     <div class="mx-auto navbar-nav border-top">
                         <a href="index.html" class="nav-item nav-link active">Home</a>
-                        <a href="detail-page.html" class="nav-item nav-link">Detail Page</a>
-                        <a href="404.html" class="nav-item nav-link">404 Page</a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Dropdown</a>
                             <div class="m-0 dropdown-menu bg-secondary rounded-0">
@@ -68,9 +69,9 @@
                     </div>
                     <div class="pt-3 d-flex flex-nowrap border-top pt-xl-0">
                         <div class="d-flex">
-                            <img src="img/weather-icon.png" class="img-fluid w-100 me-2" alt="">
+                            {{-- <img src="img/weather-icon.png" class="img-fluid w-100 me-2" alt=""> --}}
                             <div class="d-flex align-items-center">
-                                <strong class="fs-4 text-secondary">31°C</strong>
+                                {{-- <strong class="fs-4 text-secondary">31°C</strong> --}}
                                 <div class="d-flex flex-column ms-2" style="width: 150px;">
                                     <span class="text-body">NEW YORK,</span>
                                     <small>Mon. 10 jun 2024</small>
@@ -81,6 +82,9 @@
                             class="my-auto bg-white border btn-search btn border-primary btn-md-square rounded-circle"
                             data-bs-toggle="modal" data-bs-target="#searchModal"><i
                                 class="fas fa-search text-primary"></i></button>
+                        <div> <a href="#" class="btn btn-outline-primary ms-5 rounded-pill">login/register</a>
+                        </div>
+
                     </div>
                 </div>
             </nav>
