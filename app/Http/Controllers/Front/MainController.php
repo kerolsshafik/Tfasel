@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use view;
 use App\Models\Article;
+use App\Models\Contact;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,50 +16,106 @@ class MainController extends Controller
      */
     public function home()
     {
-        // Get the first article
-        $first = Article::first();
+        // Get the first random article
+        $first = Article::where([
+            ['is_published', 1],
+            ['is_updated', 1]
+        ])->inRandomOrder()->first();
 
-        // Get random articles (this should be `inRandomOrder()`)
-        $rendom = Article::inRandomOrder()->get(); // If you want a random selection, consider using `take()` to limit the number
+        // Get the most popular article (highest count)
+        $popular = Article::where([
+            ['is_published', 1],
+            ['is_updated', 1]
+        ])->orderBy('count', 'desc')->first();
 
-        // Limit the results to 5 articles
-        $limit = Article::limit(5)->get();
+        // dd($popular);
+        // Get 5 random articles
+        $randoms = Article::where([
+            ['is_published', 1],
+            ['is_updated', 1]
+        ])->inRandomOrder()->take(4)->get();
+        // dd($randoms);
 
-        // Get all articles
-        $articles = Article::all();
+        // Get the first 5 articles
+        $limit = Article::with('user')->where([
+            ['is_published', 1],
+            ['is_updated', 1]
+        ])->limit(6)->get();
 
-        // Get articles where the IDs are in the specified array
-        $five = Article::whereIn('id', ['1', '2', '3', '4', '5'])->get();
+        // Get all published and updated articles
+        $articles = Article::where([
+            ['is_published', 1],
+            ['is_updated', 1]
+        ])->get();
+
+        // Get articles with specific IDs
+        $five = Article::where([
+            ['is_published', 1],
+            ['is_updated', 1]
+        ])->whereIn('id', [1, 2, 3, 4, 6])->get(); // IDs as integers
 
         // Get the first 5 categories with their articles
-        $cat = Category::with('articles')->limit(5)->get(); // Correct the method call
+        $cat = Category::with('articles')->limit(5)->get();
 
-        // Get articles from category with ID 4, limiting to 4 articles
-        $news = Category::with('articles')->where('id', 4)->limit(4)->get(); // Corrected `limits` to `limit`
-
-        return view('front.home.main', compact('articles'));
-
+        // Get 4 articles from category with ID 4
+        $news = Article::with('user')->where('category_id', 4)->inRandomOrder()->take(2)->get();
+        // dd($news);
+        // Pass all variables to the view
+        return view('front.home.main', compact('first', 'popular', 'randoms', 'limit', 'articles', 'five', 'cat', 'news'));
     }
 
-
-    public function footer()
+    public function news(Category $category)
     {
-        // Retrieve all categories
-        $categories = Category::all();
+        $id = $category->id;
+        $categorie = Article::with('user')
+        ->where('category_id', $id)
+        ->paginate(10);
+        // dd($categorie);
 
-        // Retrieve the first 2 articles
-        $articles = Article::limit(2)->get();
-
-        // Retrieve the first 5 media items for 'big_images' associated with the first article (or modify as needed)
-
-        $galleries = Article::limit(6)->get();
-
-        // Pass the data to the view
-        return response()->json([
-            'categories' => $categories,
-            'articles' => $articles,
-            'galleries' => $galleries,
-        ]);
+        return view('front.home.cat', compact('categorie', 'category'));
     }
+
+    public function show_article(Article $article)
+    {
+        $article->increment('count');
+
+
+        return view('front.home.show_article', compact('article'));
+
+    }
+
+
+    public function showcontact()
+    {
+
+        return view('front.home.contact');
+    }
+    public function submitForm(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'subject' => 'required|string|max:255',
+            'message' => 'required|string',
+        ]);
+
+        // Create a new contact entry
+        Contact::create($request->all());
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Your message has been sent successfully.');
+    }
+
+    public function login()
+    {
+        return view('front.home.login');
+    }
+    public function register()
+    {
+        return view('front.home.register');
+    }
+
+
 
 }

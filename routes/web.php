@@ -17,7 +17,15 @@ Route::get('/', function () {
 //     });
 
 
-Route::get('/homes', [MainController::class, 'home'])->name('home');
+Route::get('/Tafasel', [MainController::class, 'home'])->name('Tafasel.home');
+Route::get('Tafasel/news/{category}', [MainController::class, 'news'])->name('Tafasel.news');
+Route::get('Tafasel/show_article/{article}', [MainController::class, 'show_article'])->name('Tafasel.show_article');
+
+Route::get('Tafasel/showcontact', [MainController::class, 'showcontact'])->name('Tafasel.showcontact');
+Route::post('Tafasel/showcontact', [MainController::class, 'submitForm'])->name('Tafasel.submit');
+
+Route::get('/Tafasel/login', [MainController::class, 'login'])->name('Tafasel.login');
+
 
 
 // Route::get('locale/{locale}', function ($locale) {

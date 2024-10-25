@@ -46,6 +46,28 @@
                         <textarea class="form-control ckeditor" name="content_en" rows="5" required>{{ $article->content_en }}</textarea>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="description_ar">description_ar (Arabic)</label>
+                        <input type="text" class="form-control" id="description_ar" name="description_ar"
+                            value="{{ $article->description_ar }}" required>
+                        @error('description_ar')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description_en">description_en </label>
+                        <input type="text" class="form-control" id="description_en" name="description_en"
+                            value="{{ $article->description_en }}" required>
+                        @error('description_en')
+                            <div class="text-danger">
+                                {{ $message }}
+                            </div>
+                        @enderror
+                    </div>
+
                     <!-- Category Field -->
                     <div class="mb-3">
                         <label for="category_id">Category</label>

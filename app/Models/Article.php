@@ -26,6 +26,8 @@ class Article extends Model implements HasMedia
         'title_en',
         'content_ar',
         'content_en',
+        'description_ar',
+        'description_en',
         'slug',
         'user_id',
         'category_id',
@@ -35,10 +37,11 @@ class Article extends Model implements HasMedia
 
     protected $appends = ['Wishlist',];
 
+    
 
     // Automatically generate the slug when creating or updating
 
-    public function categoey()
+    public function category()
     {
 
         return $this->belongsTo(Category::class);

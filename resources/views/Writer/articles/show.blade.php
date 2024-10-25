@@ -30,8 +30,16 @@
                                     <td>{{ $article->title_en }}</td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Category </th>
-                                    <td>{{ $article->category_id }}</td>
+                                    <th scope="row">description_ar ()</th>
+                                    <td>{{ $article->title_en }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">description_ar ()</th>
+                                    <td>{{ $article->description_ar }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">description_en </th>
+                                    <td>{{ $article->description_en }}</td>
                                 </tr>
 
                                 <!-- Article Content in Arabic -->

@@ -25,6 +25,8 @@ class ValidateArticleRequest extends FormRequest
             'title_ar' => 'required|string|max:255',
             'content_ar' => 'required|string',
             'title_en' => 'required|string|max:255',
+            'description_ar' => 'required|string|max:255',
+            'description_en' => 'required|string|max:255',
             'content_en' => 'required|string',
             'category_id' => 'required|exists:categories,id',
             'images' => 'nullable|array|max:5',

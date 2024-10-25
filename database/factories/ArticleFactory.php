@@ -27,12 +27,15 @@ class ArticleFactory extends Factory
 
         return [
             'title_en' => $title_en,              // English title
-            'title_ar' => $title_ar,              // Arabic title
+            'title_ar' => $title_ar,
+            'description_en' => $this->faker->paragraph(),
+            'description_ar' => $this->faker->paragraph(),          // Arabic title
             'content_en' => $this->faker->paragraph(), // English content
-            'content_ar' => $this->faker->paragraph(), // Arabic content
+            'content_ar' => $this->faker->paragraph(),
+            'count' => $this->faker->numberBetween(20, 500), // Arabic content
             'slug' => Str::slug($title_en),       // Generates a slug from the English title
-            'user_id' => User::factory(),         // Creates or associates with a user
-            'category_id' => Category::factory(), // Creates or associates with a category
+            'user_id' => User::whereIn('status', ['admin', 'writer'])->inRandomOrder()->first()?->id, // Gets the ID of a random matched user
+            'category_id' => Category::inRandomOrder()->first()?->id,
         ];
     }
 }
