@@ -7,9 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Front\MainController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [MainController::class, 'home']);
 
 // Route::middleware(['auth', \Laravel\Telescope\Http\Middleware\Authorize::class])
 //     ->get('telescope', function () {
@@ -39,7 +37,7 @@ Route::get('/Tafasel/login', [MainController::class, 'login'])->name('Tafasel.lo
 
 // ------------------------------- Admin && WRITER --------------------------------------------------------------------//
 Route::middleware(['auth','status:writer|admin'])->group(function () {
-    Route::get('/dashboard', [ProfileController::class, 'index'])->name('dashboard');
+    Route::get('/admin', [ProfileController::class, 'index'])->name('dashboard');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
