@@ -14,7 +14,10 @@
                         <div class="shadow-sm card">
                             <a href="{{ route('Tafasel.show_article', $cat) }}">
                                 <img decoding="async" src="{{ $cat->getFirstMediaUrl('big_images') }}"
-                                    class="rounded img-fluid img-zoomin" height="300px" style="width: auto;" alt="">
+                                    class="rounded img-fluid img-zoomin"
+                                    style="height: 300px; width: 450px; object-fit: cover;" alt="">
+
+
                             </a>
                             <div class="card-body">
                                 <a class="mb-2 h4 text-dark link-hover" href="{{ route('Tafasel.show_article', $cat) }}">
