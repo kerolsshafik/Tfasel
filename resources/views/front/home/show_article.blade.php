@@ -20,6 +20,11 @@
                 </div>
                 <!-- Image Descriptions -->
                 <p id="mainDescription" class="text-muted">Click on a thumbnail to see the description.</p>
+
+                <!-- Small  -->
+                <p class="mb-0 fs-5"><i class="fa fa-clock">
+                        {{ $article->created_at->format(' D/ h:i') }}</i> </p>
+                <p class="mb-0 fs-5"><i class="fa fa-eye"> {{ $article->count }} Views</i></p>
             </div>
             <div class="col-md-6">
                 <!-- Thumbnails for Swapping -->

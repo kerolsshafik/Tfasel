@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Front;
 
 use view;
+use Carbon\Carbon;
 use App\Models\Article;
 use App\Models\Contact;
 use App\Models\Category;
@@ -55,13 +56,25 @@ class MainController extends Controller
         ])->whereIn('id', [1, 2, 3, 4, 6])->get(); // IDs as integers
 
         // Get the first 5 categories with their articles
-        $cat = Category::with('articles')->limit(5)->get();
-
+        // $cats = Category::with('articles')->inRandomOrder()->take(6)->get();
+        $cats = Category::with(['articles' => function ($q) {
+            $q->with('user') // Eager load the 'user' relationship
+              ->where([
+                  ['is_published', 1], // Ensure the article is published
+                  ['is_updated', 1]    // Ensure the article is updated
+              ])
+              ->whereBetween('created_at', [Carbon::now()->subDays(4), Carbon::now()]) // Use an instance of Carbon
+              ->limit(5); // Limit to 5 articles per category
+        }])
+        ->inRandomOrder() // Randomize the order of categories
+        ->take(6) // Take 6 categories
+        ->get();
+        // dd($cats);
         // Get 4 articles from category with ID 4
         $news = Article::with('user')->where('category_id', 4)->inRandomOrder()->take(2)->get();
         // dd($news);
         // Pass all variables to the view
-        return view('front.home.main', compact('first', 'popular', 'randoms', 'limit', 'articles', 'five', 'cat', 'news'));
+        return view('front.home.main', compact('first', 'popular', 'randoms', 'limit', 'articles', 'five', 'cats', 'news'));
     }
 
     public function news(Category $category)

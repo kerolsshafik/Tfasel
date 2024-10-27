@@ -45,7 +45,11 @@
                                 <div class="overflow-hidden border border-2 rounded-circle border-warning">
                                     {{-- <img src="{{ $article->getFirstMediaUrl('big_images') }}"  img\news-1.jpg --}}
                                     <img src="{{ $article->getFirstMediaUrl('big_images') }}"
-                                        class="img-zoomin img-fluid rounded-circle " alt=""width="120px;">
+                                        class="img-zoomin img-fluid rounded-circle" alt=""
+                                        style="height: 80px;  max-width:80px;">
+
+
+
                                 </div>
                                 <div class="d-flex flex-column ps-4">
                                     <p class="mb-3 text-primary text-uppercase">{{ $article->category->name_en }}</p>
@@ -84,7 +88,8 @@
                                     <div class="overflow-hidden rounded">
                                         @if ($gallery->getFirstMedia('big_images'))
                                             <img src="{{ $gallery->getFirstMedia('big_images')->getUrl() }}"
-                                                class="rounded img-zoomin img-fluid w-100" alt="">
+                                                class="rounded img-zoomin img-fluid "
+                                                alt=""style="height: 80px; width: auto;">
                                         @else
                                             <p>No image available</p>
                                         @endif

@@ -16,7 +16,7 @@
                                 <img decoding="async" src="{{ $now->getFirstMediaUrl('big_images') }}"
                                     class="border img-fluid rounded-circle border-3 border-primary me-2"
                                     style="width: 30px; height: 30px;" alt="">
-                                <a href="#">
+                                <a href="{{ route('Tafasel.show_article', $now) }}">
                                     <p class="mb-0 text-white link-hover">{{ $now->title_ar }}</p>
                                 </a>
                             </div>
