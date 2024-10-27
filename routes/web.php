@@ -49,15 +49,20 @@ Route::middleware(['auth','status:writer|admin'])->group(function () {
     Route::patch('/articles/{id}/toggle-publish', [ArticleController::class, 'togglePublish'])->name('articles.togglePublish');
     Route::patch('/articles/{id}/toggle-update', [ArticleController::class, 'toggleUpdate'])->name('articles.toggleUpdate');
 
-
-});
-Route::group(['middleware' => [ 'auth','status:admin']], function () {
-
     Route::get('/article/softdelete', [ArticleController::class, 'view_softdelete'])->name('articles.view_softdelete');
     Route::delete('/article/{id}/softdelete', [ArticleController::class, 'softdelete'])->name('articles.softdelete');
     Route::post('/article/{id}/restore', [ArticleController::class, 'restore'])->name('articles.restore');
     Route::get('/article/restoreall', [ArticleController::class, 'restoreall'])->name('articles.restoreall');
+
 });
+Route::post('/chat', [ArticleController::class, 'chat']);
+// Route::group(['middleware' => [ 'auth','status:admin']], function () {
+
+//     Route::get('/article/softdelete', [ArticleController::class, 'view_softdelete'])->name('articles.view_softdelete');
+//     Route::delete('/article/{id}/softdelete', [ArticleController::class, 'softdelete'])->name('articles.softdelete');
+//     Route::post('/article/{id}/restore', [ArticleController::class, 'restore'])->name('articles.restore');
+//     Route::get('/article/restoreall', [ArticleController::class, 'restoreall'])->name('articles.restoreall');
+// });
 
 
 // /telescope

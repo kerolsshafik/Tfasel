@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\ValidateArticleRequest;
+use Illuminate\Support\Facades\Http;
 
 class ArticleController extends Controller
 {
@@ -245,6 +246,37 @@ class ArticleController extends Controller
         }
         return redirect()->back()->with('status', 'unupdated is done');
 
+    }
+    //  -------------------------------------------  chat ---------------------------------------------------------//
+
+    public function chat(Request $request)
+    {
+        // dd("dfgfsdg");
+        try {
+            $message = $request->post('content');
+
+            // Send the message to the OpenAI API
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . env('OPENAI_API_KEY'),
+            ])->post('https://api.openai.com/v1/chat/completions', [
+                'model' => 'gpt-3.5-turbo',
+                'messages' => [
+                    ['role' => 'user', 'content' => $message]
+                ],
+                "temperature" => 0,
+                "max_tokens" => 2048
+            ]);
+
+            if ($response->successful()) {
+
+                $chatResponse = $response->json()['choices'][0]['message']['content'];
+                return response()->json(['message' => $chatResponse]);
+            } else {
+                return response()->json(['error' => 'Unable to get response from ChatGPT'], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => "Chat GPT Limit Reached. This means too many people have used this demo this month and hit the FREE limit available"], 500);
+        }
     }
 
 }
