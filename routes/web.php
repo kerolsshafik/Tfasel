@@ -55,7 +55,7 @@ Route::middleware(['auth','status:writer|admin'])->group(function () {
     Route::get('/article/restoreall', [ArticleController::class, 'restoreall'])->name('articles.restoreall');
 
 });
-Route::post('/chat', [ArticleController::class, 'chat']);
+Route::post('/chat', [ArticleController::class, 'chat'])->name('chat');
 // Route::group(['middleware' => [ 'auth','status:admin']], function () {
 
 //     Route::get('/article/softdelete', [ArticleController::class, 'view_softdelete'])->name('articles.view_softdelete');

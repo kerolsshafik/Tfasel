@@ -251,7 +251,7 @@ class ArticleController extends Controller
 
     public function chat(Request $request)
     {
-        // dd("dfgfsdg");
+        dd("dfgfsdg");
         try {
             $message = $request->post('content');
 

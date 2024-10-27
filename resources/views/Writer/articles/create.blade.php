@@ -198,7 +198,10 @@
 
                 <!-- Chat Icon and Window -->
                 <button class="chat-icon"><i class="fas fa-comment"></i> Chat</button>
-                <div class="chat-window">
+
+
+                <!-- Chat Window -->
+                <div class="chat-window" style="display: none;">
                     <div class="chat-header">
                         <h4>Chat with Us</h4>
                     </div>
@@ -233,16 +236,13 @@
             // Handle chat form submission
             $("#chat-form").submit(function(event) {
                 event.preventDefault();
-
                 let content = $("#message").val().trim();
                 if (content === '') return;
-
                 // Disable input and button
                 $("#message").prop('disabled', true);
                 $("button[type='submit']").prop('disabled', true);
-
                 $.ajax({
-                    url: "/chat",
+                    url: "{{ route('chat') }}",
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
@@ -256,9 +256,8 @@
                     $(".messages").append('<div class="right message"><p>' + content +
                         '</p></div>');
                     // Display response message
-                    $(".messages").append('<div class="left message"><p>' + response +
+                    $(".messages").append('<div class="left message"><p>' + response.message +
                         '</p></div>');
-
                     // Reset input and re-enable form
                     $("#message").val('');
                     $("#message").prop('disabled', false);
