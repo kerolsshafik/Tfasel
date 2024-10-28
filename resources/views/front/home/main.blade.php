@@ -220,34 +220,39 @@
                             @foreach ($cats as $cat)
                                 <div id="tab-{{ $cat->id }}" class="p-0 tab-pane fade show">
                                     <div class="row g-4">
-                                        <div class="col-lg-8">
-                                            <div class="overflow-hidden rounded position-relative">
-                                                <img src="{{ $cat->articles[0]->getFirstMediaUrl('big_images', 'default') }}"
-                                                    style="max-height: 280px; width: 500px;"
-                                                    class="rounded img-zoomin img-fluid"
-                                                    alt="{{ $cat->articles[0]->title_ar ?? 'Article Image' }}">
+                                        @if ($cat->articles->isNotEmpty())
+                                            <div class="col-lg-8">
+                                                <div class="overflow-hidden rounded position-relative">
+                                                    <img src="{{ $cat->articles[0]->getFirstMediaUrl('big_images', 'default') }}"
+                                                        style="max-height: 280px; width: 500px;"
+                                                        class="rounded img-zoomin img-fluid"
+                                                        alt="{{ $cat->articles[0]->title_ar ?? 'Article Image' }}">
+                                                    <div class="px-4 py-2 text-white rounded position-absolute bg-primary"
+                                                        style="top: 20px; right: 20px;">
+                                                        {{ $cat->name_en }}
+                                                    </div>
+                                                </div>
+                                                <div class="my-3">
+                                                    <a href="{{ route('Tafasel.show_article', $cat->articles[0]) }}"
+                                                        class="h4">{{ $cat->articles[0]->name_en }}</a>
+                                                </div>
 
-                                                <div class="px-4 py-2 text-white rounded position-absolute bg-primary"
-                                                    style="top: 20px; right: 20px;">
-                                                    {{ $cat->name_en }}
+                                                <p class="mt-4">{{ Str::limit($item->title_ar, 80) }}...
+                                                </p>
+                                                <div class="d-flex justify-content-between">
+                                                    <a href="#" class="text-dark link-hover me-3"><i
+                                                            class="fa fa-clock"></i>
+                                                        {{ $cat->articles[0]->created_at->format('D/ h:i') }}</a>
+                                                    <a href="#" class="text-dark link-hover me-3"><i
+                                                            class="fa fa-eye"></i>
+                                                        {{ $cat->articles[0]->count }} Views</a>
                                                 </div>
                                             </div>
-                                            <div class="my-3">
-                                                <a href="{{ route('Tafasel.show_article', $cat->articles[0]) }}"
-                                                    class="h4">{{ $cat->articles[0]->name_en }}</a>
+                                        @else
+                                            <div class="col-lg-8">
+                                                <p>No articles available.</p>
                                             </div>
-                                            <p class="mt-4">{{ Str::limit($item->title_ar, 80) }}...
-                                            </p>
-                                            <div class="d-flex justify-content-between">
-                                                <a href="#" class="text-dark link-hover me-3"><i
-                                                        class="fa fa-clock"></i>
-                                                    {{ $cat->articles[0]->created_at->format('D/ h:i') }}</a>
-                                                <a href="#" class="text-dark link-hover me-3"><i
-                                                        class="fa fa-eye"></i>
-                                                    {{ $cat->articles[0]->count }} Views</a>
-                                            </div>
-                                        </div>
-
+                                        @endif
                                         <div class="col-lg-4">
                                             <div class="row g-4">
                                                 @foreach ($cat->articles as $index => $art)

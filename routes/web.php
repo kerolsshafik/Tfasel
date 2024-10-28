@@ -8,6 +8,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Front\MainController;
 
 Route::get('/', [MainController::class, 'home']);
+Route::post('/chat', [ArticleController::class, 'chat'])->name('chat');
+
 
 // Route::middleware(['auth', \Laravel\Telescope\Http\Middleware\Authorize::class])
 //     ->get('telescope', function () {
@@ -55,7 +57,6 @@ Route::middleware(['auth','status:writer|admin'])->group(function () {
     Route::get('/article/restoreall', [ArticleController::class, 'restoreall'])->name('articles.restoreall');
 
 });
-Route::post('/chat', [ArticleController::class, 'chat'])->name('chat');
 // Route::group(['middleware' => [ 'auth','status:admin']], function () {
 
 //     Route::get('/article/softdelete', [ArticleController::class, 'view_softdelete'])->name('articles.view_softdelete');
