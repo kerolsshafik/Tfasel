@@ -1,21 +1,17 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Front\MainController;
 
 Route::get('/', [MainController::class, 'home']);
 Route::post('/chat', [ArticleController::class, 'chat'])->name('chat');
-
-
-// Route::middleware(['auth', \Laravel\Telescope\Http\Middleware\Authorize::class])
-//     ->get('telescope', function () {
-//         return view('telescope');
-//     });
-
 
 Route::get('/Tafasel', [MainController::class, 'home'])->name('Tafasel.home');
 Route::get('Tafasel/news/{category}', [MainController::class, 'news'])->name('Tafasel.news');
@@ -46,6 +42,8 @@ Route::middleware(['auth','status:writer|admin'])->group(function () {
 
     Route::resource('articles', ArticleController::class);
     Route::resource('categories', CategoryController::class);
+    Route::resource('contacts', ContactController::class);
+
     Route::resource('users', UserController::class);
 
     Route::patch('/articles/{id}/toggle-publish', [ArticleController::class, 'togglePublish'])->name('articles.togglePublish');
@@ -57,13 +55,6 @@ Route::middleware(['auth','status:writer|admin'])->group(function () {
     Route::get('/article/restoreall', [ArticleController::class, 'restoreall'])->name('articles.restoreall');
 
 });
-// Route::group(['middleware' => [ 'auth','status:admin']], function () {
-
-//     Route::get('/article/softdelete', [ArticleController::class, 'view_softdelete'])->name('articles.view_softdelete');
-//     Route::delete('/article/{id}/softdelete', [ArticleController::class, 'softdelete'])->name('articles.softdelete');
-//     Route::post('/article/{id}/restore', [ArticleController::class, 'restore'])->name('articles.restore');
-//     Route::get('/article/restoreall', [ArticleController::class, 'restoreall'])->name('articles.restoreall');
-// });
 
 
 // /telescope

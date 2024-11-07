@@ -26,7 +26,7 @@
                     <!-- Body Field -->
                     <div class="mb-3">
                         <label for="content_ar">content_AR</label>
-                        <textarea class="form-control ckeditor" name="content_ar" rows="5" required>{{ old('content_ar') }}</textarea>
+                        <textarea class="form-control ckeditor ck" name="content_ar" rows="5" required>{{ old('content_ar') }}</textarea>
                     </div>
 
                     <!-- Title Field -->
@@ -44,7 +44,7 @@
                     <!-- Body Field -->
                     <div class="mb-3">
                         <label for="content_en">content_EN</label>
-                        <textarea class="form-control ckeditor" name="content_en" rows="5" required>{{ old('content_en') }}</textarea>
+                        <textarea class="form-control ckeditor ck2" name="content_en" rows="5" required>{{ old('content_en') }}</textarea>
                     </div>
 
                     <div class="mb-3">
@@ -118,16 +118,16 @@
                 </form>
 
                 <!-- Chat Icon -->
-                <div>
-                    <button class="chat-icon"><i class="fas fa-comment"></i> Chat</button>
-                </div>
+                {{-- <div>
+
+                </div> --}}
 
                 <!-- Chat Icon and Window -->
-                <button class="chat-icon"><i class="fas fa-comment"></i> Chat</button>
+                {{-- <button class="chat-icon"><i class="fas fa-comment"></i> Chat</button> --}}
 
 
                 <!-- Chat Window -->
-                <div class="chat-window" style="display: none;">
+                {{-- <div class="chat-window" style="display: none;">
                     <div class="chat-header">
                         <h4>Chat with Us</h4>
                     </div>
@@ -144,62 +144,134 @@
                             <button type="submit">Send</button>
                         </form>
                     </div>
+                 </div> --}}
+
+                <!-- Chat Button -->
+                <button id="chatButton" class="chat-icon"><i class="fas fa-comment"></i> Chat</button>
+
+                <!-- Chat Pop-up -->
+                <!-- Chat Pop-up -->
+                <div id="chatPopup"
+                    style="display: none; position: fixed; bottom: 70px; right: 20px; width: 300px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 5px; padding: 15px;">
+                    <div id="chatMessages" style="height: 200px; overflow-y: scroll; margin-bottom: 10px;"></div>
+                    <input type="text" id="userMessage" placeholder="Type a message..."
+                        style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                    <button onclick="sendMessage()"
+                        style="margin-top: 5px; width: 100%; padding: 8px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Send</button>
                 </div>
+
             </div>
+
         </div>
     </div>
 @endsection
 
 @section('js')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
+    {{-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> --}}
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Toggle chat window
-            $(".chat-icon").click(function() {
-                $(".chat-window").toggle();
-            });
+        // Toggle chat popup visibility
+        document.getElementById("chatButton").onclick = function() {
+            const chatPopup = document.getElementById("chatPopup");
+            chatPopup.style.display = chatPopup.style.display === "none" ? "block" : "none";
+        };
 
-            // Handle chat form submission
-            $("#chat-form").submit(function(event) {
-                event.preventDefault();
-                let content = $("#message").val().trim();
-                if (content === '') return;
-                // Disable input and button
-                $("#message").prop('disabled', true);
-                $("button[type='submit']").prop('disabled', true);
-                // داخل طلب AJAX لتقديم الدردشة
-                $.ajax({
-                    url: "{{ route('chat') }}",
-                    method: 'POST',
+        // Send message to ChatGPT API
+        async function sendMessage() {
+            const userMessage = document.getElementById("userMessage").value.trim();
+            const chatMessages = document.getElementById("chatMessages");
+
+            if (!userMessage) return; // Exit if input is empty
+
+            // Display user message
+            const userDiv = document.createElement("div");
+            userDiv.textContent = `You: ${userMessage}`;
+            userDiv.style.marginBottom = "5px";
+            chatMessages.appendChild(userDiv);
+
+            document.getElementById("userMessage").value = ""; // Clear input
+
+            // Send message to ChatGPT API using axios
+            try {
+                const response = await axios.post('/chat', {
+                    message: userMessage
+                }, {
                     headers: {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    },
-                    data: {
-                        "model": "gpt-3.5-turbo",
-                        "content": content
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content'),
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
                     }
-                }).done(function(response) {
-                    $(".messages").append('<div class="right message"><p>' + content +
-                        '</p></div>');
-                    $(".messages").append('<div class="left message"><p>' + response.message +
-                        '</p></div>');
-                    $("#message").val('');
-                    $(".chat-messages").scrollTop($(".chat-messages")[0].scrollHeight);
-                }).fail(function(xhr) {
-                    console.error("تفاصيل الخطأ:", xhr.responseText);
-                    alert("حدث خطأ: " + xhr.responseText);
-                    $("#message").prop('disabled', false);
-                    $("button[type='submit']").prop('disabled', false);
                 });
-            });
 
-        });
+                const reply = response.data.choices[0].message.content;
+
+                // Display ChatGPT response
+                const botDiv = document.createElement("div");
+                botDiv.textContent = `ChatGPT: ${reply}`;
+                botDiv.style.marginBottom = "5px";
+                botDiv.style.color = "#007bff";
+                chatMessages.appendChild(botDiv);
+
+                // Scroll to the bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } catch (error) {
+                console.error("Error communicating with ChatGPT:", error);
+            }
+        }
     </script>
+    {{-- <script>
+        document.getElementById("chatButton").onclick = function() {
+            const chatPopup = document.getElementById("chatPopup");
+            chatPopup.style.display = chatPopup.style.display === "none" ? "block" : "none";
+        };
+
+        async function sendMessage() {
+            const userMessage = document.getElementById("userMessage").value;
+            const chatMessages = document.getElementById("chatMessages");
+
+            if (!userMessage.trim()) return;
+
+            // Display user message
+            const userDiv = document.createElement("div");
+            userDiv.textContent = `You: ${userMessage}`;
+            chatMessages.appendChild(userDiv);
+
+            document.getElementById("userMessage").value = ""; // Clear input
+
+            // Send message to ChatGPT API using axios
+            try {
+                const response = await axios.post('/chat', {
+                    message: userMessage
+                }, {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content'),
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    }
+                });
+
+                const reply = response.data.choices[0].message.content;
+
+                const botDiv = document.createElement("div");
+                botDiv.textContent = `ChatGPT: ${reply}`;
+                chatMessages.appendChild(botDiv);
+
+                // Scroll to the bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            } catch (error) {
+                console.error("Error communicating with ChatGPT:", error);
+            }
+        }
+    </script> --}}
+
 
 
     <script>
-        document.querySelectorAll('textarea.ckeditor').forEach((editorEl) => {
+        document.querySelectorAll('.ck, .ck2').forEach((editorEl) => {
+
             ClassicEditor
                 .create(editorEl)
                 .then(editor => {
@@ -213,4 +285,5 @@
                 });
         });
     </script>
+
 @endsection

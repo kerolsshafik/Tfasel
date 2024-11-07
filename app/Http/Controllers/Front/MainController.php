@@ -82,7 +82,7 @@ class MainController extends Controller
         $id = $category->id;
         $categorie = Article::with('user')
         ->where('category_id', $id)
-        ->paginate(10); 
+        ->paginate(10);
         // dd($categorie);
 
         return view('front.home.cat', compact('categorie', 'category'));
@@ -100,7 +100,6 @@ class MainController extends Controller
 
     public function showcontact()
     {
-
         return view('front.home.contact');
     }
     public function submitForm(Request $request)

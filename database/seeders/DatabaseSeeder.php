@@ -16,22 +16,22 @@ class DatabaseSeeder extends Seeder
     {
 
 
-        // User::updateOrCreate([
-        //     'name' => 'Test',
-        //     'email' => 'test@test.com',
-        //     'password' => Hash::make('password'),
-        //     'status' => 'writer',
-        // ]);
+        User::updateOrCreate([
+            'name' => 'Test',
+            'email' => 'test@test.com',
+            'password' => Hash::make('password'),
+            'status' => 'writer',
+        ]);
 
-        // User::updateOrCreate([
-        //     'name' => 'Admin',
-        //     'email' => 'admin@admin.com',
-        //     'password' => Hash::make('password'),
-        //     'status' => 'admin',
-        // ]);
+        User::updateOrCreate([
+            'name' => 'Admin',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('password'),
+            'status' => 'admin',
+        ]);
 
-        // User::factory(10)->create();
-
+        // CategorySeeder::factory(10)->create();
+        $this->call(CategorySeeder::class);
 
         $this->call(ArticleSeeder::class);
 
