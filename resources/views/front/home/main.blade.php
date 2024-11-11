@@ -4,6 +4,44 @@
 
 @section('content')
     <!-- Main Post Section Start -->
+    <div class="container-fluid topbar bg-dark d-none d-lg-block">
+        <div class="container px-0">
+            <div class="topbar-top d-flex justify-content-between flex-lg-wrap">
+                <div class="flex-grow-0 top-info">
+                    <span class="rounded-circle btn-sm-square bg-primary me-2">
+                        <i class="text-white fas fa-bolt"></i>
+                    </span>
+                    <div class="border-white pe-2 me-3 border-end d-flex align-items-center">
+                        <p class="mb-0 text-white fs-6 fw-normal">Trending</p>
+                    </div>
+                    <div class="overflow-hidden" style="width: 735px;">
+                        @foreach ($nows as $now)
+                            <div id="note" class="ps-2">
+                                <img decoding="async" src="{{ $now->getFirstMediaUrl('big_images') }}"
+                                    class="border img-fluid rounded-circle border-3 border-primary me-2"
+                                    style="width: 30px; height: 30px;" alt="">
+                                <a href="{{ route('Tafasel.show_article', $now) }}">
+                                    <p class="mb-0 text-white link-hover">{{ $now->title_ar }}</p>
+                                </a>
+                            </div>
+                        @endforeach
+
+                    </div>
+                </div>
+                <div class="top-link flex-lg-wrap">
+                    <i class="text-white fas fa-calendar-alt border-end border-secondary pe-2 me-2"> <span
+                            class="text-body">{{ $currentDateTime }}</span></i>
+                    <div class="d-flex icon">
+                        <p class="mb-0 text-white me-2">Follow Us:</p>
+                        <a href="#" class="me-2"><i class="fab fa-facebook-f text-body link-hover"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-instagram text-body link-hover"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-youtube text-body link-hover"></i></a>
+                        <a href="#" class="me-2"><i class="fab fa-linkedin-in text-body link-hover"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="py-5 container-fluid">
         <div class="container py-5">
             <div class="row g-4">

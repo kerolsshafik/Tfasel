@@ -18,7 +18,7 @@ class ViewServiceProvider extends ServiceProvider
     public function boot()
     {
         // Share data with all views
-        View::composer(['front.layout.header', 'front.layout.footer'], function ($view) {
+        View::composer(['front.layout.app', 'front.layout.footer'], function ($view) {
             // View::composer('front.layout.*', function ($view) {
             $currentDateTime =  Carbon::now();
 

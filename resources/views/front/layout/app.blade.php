@@ -49,6 +49,7 @@
     <!-- Spinner End -->
 
 
+
     <!-- Navbar start -->
     @include('front.layout.header')
     <!-- Modal Search Start -->

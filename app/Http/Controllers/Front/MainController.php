@@ -17,6 +17,12 @@ class MainController extends Controller
      */
     public function home()
     {
+        $currentDateTime =  Carbon::now();
+        $nows = Article::where([
+            ['is_published', 1],
+            ['is_updated', 1]
+        ])->whereBetween('created_at', [Carbon::yesterday(), Carbon::now()])->with('category')->inRandomOrder()->limit(1)->get();
+
         // Get the first random article
         $first = Article::where([
             ['is_published', 1],
@@ -74,7 +80,7 @@ class MainController extends Controller
         $news = Article::with('user')->where('category_id', 4)->inRandomOrder()->take(2)->get();
         // dd($news);
         // Pass all variables to the view
-        return view('front.home.main', compact('first', 'popular', 'randoms', 'limit', 'articles', 'five', 'cats', 'news'));
+        return view('front.home.main', compact('nows', 'currentDateTime', 'first', 'popular', 'randoms', 'limit', 'articles', 'five', 'cats', 'news'));
     }
 
     public function news(Category $category)
